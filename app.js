@@ -11,16 +11,44 @@ let image1 = document.getElementById('image-one');
 let image2 = document.getElementById('image-two');
 let image3 = document.getElementById('image-three');
 
+let radio1 = document.getElementById('radio1');
+let radio2 = document.getElementById('radio2');
+let radio3 = document.getElementById('radio3');
+
+const form = document.getElementById('product-form');
 
 // run the script when page loads
-const randomArray = getThreeRandomProducts(productArray);
+getRandomProducts();
 
-// display the names and images
-productName1.textContent = randomArray[0].name;
-image1.src = randomArray[0].image;
+// get the id that the user clicked and reset the products
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const userChoice = document.querySelector('input[type=radio]:checked').value;
 
-productName2.textContent = randomArray[1].name;
-image2.src = randomArray[1].image;
+    getRandomProducts();
 
-productName3.textContent = randomArray[2].name;
-image3.src = randomArray[2].image;
+});
+
+
+function getRandomProducts() {
+    const randomArray = getThreeRandomProducts(productArray);
+    // display the names and images
+
+    radio1.checked = false;
+    radio2.checked = false;
+    radio3.checked = false;
+
+    productName1.textContent = randomArray[0].name;
+    image1.src = randomArray[0].image;
+    radio1.value = randomArray[0].id;
+
+    productName2.textContent = randomArray[1].name;
+    image2.src = randomArray[1].image;
+    radio2.value = randomArray[1].id;
+
+    productName3.textContent = randomArray[2].name;
+    image3.src = randomArray[2].image;
+    radio3.value = randomArray[2].id;
+
+}
+

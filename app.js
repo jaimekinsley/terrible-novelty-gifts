@@ -26,9 +26,54 @@ form.addEventListener('submit', (event) => {
     const userChoice = document.querySelector('input[type=radio]:checked').value;
 
     getRandomProducts();
+    incrementTimesPicked(userChoice, votesArray);
 
 });
 
+// increment the votes for the item the user clicked
+
+let votesArray = [];
+
+// start with findById function
+function findById(items, id){
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.id === id) {
+            return item;
+        }
+    }
+    return null;
+}
+
+// increment the votes
+function incrementTimesPicked(id, votes){
+    console.log(votes);
+
+    let voteItem = findById(votes, id);
+    if (!voteItem) {
+        addInitialVoteItem(id, votes);
+        voteItem = findById(votes, id);
+    }
+    voteItem.timesPicked++;
+}
+
+function addInitialVoteItem(id, votes){
+    const voteItem = {
+        id: id,
+        timesSeen: 0,
+        timesPicked: 0,
+    };
+    votes.push(voteItem);
+}
+
+
+
+
+
+
+
+
+// I'd like to put this in utils, but even though I exported/imported it, it still broke. Something with the DOM elements.
 
 function getRandomProducts() {
     const randomArray = getThreeRandomProducts(productArray);

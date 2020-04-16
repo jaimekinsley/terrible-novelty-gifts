@@ -2,6 +2,8 @@
 import productArray from './data/products.js';
 import { getThreeRandomProducts } from './common/utils.js';
 
+let votesArray = [];
+
 // Get some elements from the DOM
 let productName1 = document.getElementById('product-name1');
 let productName2 = document.getElementById('product-name2');
@@ -28,11 +30,12 @@ form.addEventListener('submit', (event) => {
     getRandomProducts();
     incrementTimesPicked(userChoice, votesArray);
 
+
 });
 
 // increment the votes for the item the user clicked
 
-let votesArray = [];
+
 
 // start with findById function
 function findById(items, id){
@@ -47,8 +50,6 @@ function findById(items, id){
 
 // increment the votes
 function incrementTimesPicked(id, votes){
-    console.log(votes);
-
     let voteItem = findById(votes, id);
     if (!voteItem) {
         addInitialVoteItem(id, votes);
@@ -65,6 +66,20 @@ function addInitialVoteItem(id, votes){
     };
     votes.push(voteItem);
 }
+
+// increment the times seen
+function incrementTimesSeen(id, votes){
+    let voteItem = findById(votes, id);
+    if (!voteItem) {
+        addInitialVoteItem(id, votes);
+        voteItem = findById(votes, id);
+    }
+    voteItem.timesSeen++;
+}
+
+
+
+
 
 
 
@@ -94,6 +109,11 @@ function getRandomProducts() {
     productName3.textContent = randomArray[2].name;
     image3.src = randomArray[2].image;
     radio3.value = randomArray[2].id;
+
+    // increment the times seen
+    incrementTimesSeen(randomArray[0].id, votesArray);
+    incrementTimesSeen(randomArray[1].id, votesArray);
+    incrementTimesSeen(randomArray[2].id, votesArray);
 
 }
 

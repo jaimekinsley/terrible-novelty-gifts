@@ -2,7 +2,9 @@
 import productArray from './data/products.js';
 import { getThreeRandomProducts } from './common/utils.js';
 
+// initialize 
 let votesArray = [];
+let nextCounter = 0;
 
 // Get some elements from the DOM
 let productName1 = document.getElementById('product-name1');
@@ -26,17 +28,22 @@ getRandomProducts();
 form.addEventListener('submit', (event) => {
     event.preventDefault();
     const userChoice = document.querySelector('input[type=radio]:checked').value;
+    
+    incrementTimesPicked(votesArray, userChoice);
+    incrementTimesSeen(votesArray, userChoice);
+    updateVotesArray();
 
-    getRandomProducts();
-    incrementTimesPicked(userChoice, votesArray);
+    nextCounter++;
 
+    if (nextCounter >= 3){
+        window.location = '../results';
+    } else {
+        getRandomProducts();
+    }
 
 });
 
 // increment the votes for the item the user clicked
-
-
-
 // start with findById function
 function findById(items, id){
     for (let i = 0; i < items.length; i++) {
@@ -49,38 +56,39 @@ function findById(items, id){
 }
 
 // increment the votes
-function incrementTimesPicked(id, votes){
+function incrementTimesPicked(votes, id){
     let voteItem = findById(votes, id);
     if (!voteItem) {
-        addInitialVoteItem(id, votes);
+        addInitialVoteItem(votes, id);
         voteItem = findById(votes, id);
     }
     voteItem.timesPicked++;
 }
 
-function addInitialVoteItem(id, votes){
+// increment the times seen
+function incrementTimesSeen(votes, id){
+    let voteItem = findById(votes, id);
+    if (!voteItem) {
+        addInitialVoteItem(votes, id);
+        voteItem = findById(votes, id);
+    }
+    voteItem.timesSeen++;
+}
+
+function addInitialVoteItem(votes, id){
     const voteItem = {
         id: id,
         timesSeen: 0,
         timesPicked: 0,
     };
     votes.push(voteItem);
+
 }
 
-// increment the times seen
-function incrementTimesSeen(id, votes){
-    let voteItem = findById(votes, id);
-    if (!voteItem) {
-        addInitialVoteItem(id, votes);
-        voteItem = findById(votes, id);
-    }
-    voteItem.timesSeen++;
+// //stringify the array in local storage 
+function updateVotesArray(){
+    localStorage.setItem('VOTESARRAY', JSON.stringify(votesArray));
 }
-
-
-
-
-
 
 
 
@@ -92,11 +100,12 @@ function incrementTimesSeen(id, votes){
 
 function getRandomProducts() {
     const randomArray = getThreeRandomProducts(productArray);
-    // display the names and images
-
+// start with unchecked radio buttons
     radio1.checked = false;
     radio2.checked = false;
     radio3.checked = false;
+
+// display the names and images
 
     productName1.textContent = randomArray[0].name;
     image1.src = randomArray[0].image;
@@ -110,10 +119,9 @@ function getRandomProducts() {
     image3.src = randomArray[2].image;
     radio3.value = randomArray[2].id;
 
-    // increment the times seen
-    incrementTimesSeen(randomArray[0].id, votesArray);
-    incrementTimesSeen(randomArray[1].id, votesArray);
-    incrementTimesSeen(randomArray[2].id, votesArray);
-
+// increment the times seen
+    incrementTimesSeen(votesArray, randomArray[0].id);
+    incrementTimesSeen(votesArray, randomArray[1].id);
+    incrementTimesSeen(votesArray, randomArray[2].id);
 }
 

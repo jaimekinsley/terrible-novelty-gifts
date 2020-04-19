@@ -19,3 +19,5 @@ export function getThreeRandomProducts(productArray){
     }
     return [productOne, productTwo, productThree];
 }
+
+

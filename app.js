@@ -36,7 +36,7 @@ form.addEventListener('submit', (event) => {
     nextCounter++;
 
     if (nextCounter >= 25){
-        window.location = '../results';
+        window.location = '../results'; 
     } else {
         getRandomProducts();
     }
